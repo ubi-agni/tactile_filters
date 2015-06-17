@@ -1,0 +1,28 @@
+<package>
+  <name>tactile_filters</name>
+  <version>0.0.1</version>
+  <description>filters and calibration tools for tactile sensors</description>
+
+  <!-- One maintainer tag required, multiple allowed, one person per tag --> 
+  <maintainer email="rhaschke@techfak.uni-bielefeld.de">Robert Haschke</maintainer>
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>GPLv3</license>
+
+  <!-- Url tags are optional, but mutiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/tactile_tools</url> -->
+
+
+  <!-- Author tags are optional, mutiple are allowed, one per tag -->
+  <!-- Authors do not have to be maintianers, but could be -->
+  <!-- Example: -->
+  <author email="rhaschke@techfak.uni-bielefeld.de">Robert Haschke</author>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
