@@ -60,7 +60,8 @@ public:
 	/// return values with given mode into new vector v
 	vector_data getValues (TactileValue::Mode mode) const;
 
-
+	float accumulate(float (*accessor)(const TactileValue &self),
+	                 AccMode mode, bool bMean) const;
 	static float accumulate (const vector_data& data,
 	                         AccMode mode=Sum, bool bMean=true);
 

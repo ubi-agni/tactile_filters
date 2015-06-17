@@ -54,55 +54,33 @@ TactileValueArray::getValues (TactileValue::Mode mode) const {
 	return vReturn;
 }
 
-static float posAdd (float result, float c) {
-	if (c > 0) return result+c;
+typedef float(*AccumulatorFunction)(const float, const float);
+static float Add    (float result, float c) {return result+c;}
+static float posAdd (float result, float c) {if (c > 0) return result+c; else return result;}
+static float negAdd (float result, float c) {if (c < 0) return result+c; else return result;}
+static float posCnt (float result, float c) {if (c > 0) return result+1; else return result;}
+static float negCnt (float result, float c) {if (c < 0) return result+1; else return result;}
+static float minFun (float result, float c) {return std::min(result, c);}
+static float maxFun (float result, float c) {return std::max(result, c);}
+
+static float initial[] = {0,  0, 0,  0, 0,  FLT_MAX, -FLT_MAX};
+static AccumulatorFunction accumulators[] = {Add,  posAdd, negAdd,  posCnt, negCnt,  minFun, maxFun};
+
+float TactileValueArray::accumulate (float (*accessor)(const TactileValue& self),
+                                     AccMode mode, bool bMean) const {
+	float result = initial[mode];
+	AccumulatorFunction acc = accumulators[mode];
+	for (const_iterator it=vSensors.begin(), e=vSensors.end(); it!=e; ++it)
+		result = acc(result, accessor(*it));
+	if (bMean && vSensors.size()) result /= vSensors.size();
 	return result;
 }
-static float negAdd (float result, float c) {
-	if (c < 0) return result+c;
-	return result;
-}
-static float posCount (float result, float c) {
-	if (c > 0) return result+1;
-	return result;
-}
-static float negCount (float result, float c) {
-	if (c < 0) return result+1;
-	return result;
-}
-static float minFunc (float a, float b) {return std::min(a,b);}
-static float maxFunc (float a, float b) {return std::max(a,b);}
-float TactileValueArray::accumulate (const TactileValueArray::vector_data& data, 
+
+float TactileValueArray::accumulate (const TactileValueArray::vector_data& data,
                                      AccMode mode, bool bMean) {
-	float fRet=0;
-	switch (mode) {
-		case Sum: 
-			fRet = std::accumulate(data.begin(),data.end(), 0.);
-			break;
-
-		case SumPositive:
-			fRet = std::accumulate(data.begin(),data.end(), 0., posAdd);
-			break;
-		case SumNegative:
-			fRet = std::accumulate(data.begin(),data.end(), 0., negAdd);
-			break;
-
-		case CountPositive:
-			fRet = std::accumulate(data.begin(),data.end(), 0., posCount);
-			break;
-		case CountNegative:
-			fRet = std::accumulate(data.begin(),data.end(), 0., negCount);
-			break;
-
-		case Min:
-			fRet = std::accumulate(data.begin(),data.end(), FLT_MAX, minFunc);
-			break;
-		case Max:
-			fRet = std::accumulate(data.begin(),data.end(), -FLT_MAX, maxFunc);
-			break;
-	}
-	if (bMean) fRet /= data.size();
-	return fRet;
+	float result = std::accumulate(data.begin(), data.end(), initial[mode], accumulators[mode]);
+	if (bMean && data.size()) result /= data.size();
+	return result;
 }
 
 void TactileValueArray::setMeanLambda (float fLambda) {
