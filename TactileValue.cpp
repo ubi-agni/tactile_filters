@@ -37,9 +37,9 @@ std::string TactileValue::getModeName (Mode m) {
 
 void TactileValue::init(float fMin, float fMax)
 {
-	rAbsRange.min() = fMin;
-	rAbsRange.max() = fMax;
-	this->fCur = this->fMean;
+	rAbsRange.init(fMin, fMax);
+	rDynRange.init();
+	this->fCur = this->fMean = NAN;
 	this->fReleased = FLT_MAX;
 }
 

@@ -4,15 +4,18 @@
 namespace tactile {
 
 TactileValueArray::TactileValueArray(size_t n, float min, float max)
-	: fMin(min), fMax(max)
 {
-	init(n);
+	init(n, min, max);
 }
 
-void TactileValueArray::init(size_t n) {
+void TactileValueArray::init(size_t n, float min, float max) {
 	vSensors.resize(n);
+	reset(min, max);
+}
+
+void TactileValueArray::reset(float min, float max) {
 	for (iterator it=vSensors.begin(), e=vSensors.end(); it!=e; ++it)
-		it->init(fMin, fMax);
+		it->init(min, max);
 }
 
 

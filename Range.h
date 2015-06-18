@@ -29,8 +29,13 @@ namespace tactile {
 
 class Range {
 public:
-	Range (float fMin=FLT_MAX, float fMax=-FLT_MAX)
-		: fMin(fMin), fMax(fMax) {}
+	Range (float fMin=FLT_MAX, float fMax=-FLT_MAX) {
+		init(fMin, fMax);
+	}
+
+	void   init(float fMin=FLT_MAX, float fMax=-FLT_MAX) {
+		this->fMin = fMin; this->fMax = fMax;
+	}
 
 	float  min() const {return fMin;}
 	float& min() {return fMin;}

@@ -26,12 +26,17 @@ public:
 	/// initialize array of given size, with given default range
 	TactileValueArray (size_t n = 0, float min=FLT_MAX, float max=-FLT_MAX);
 
+	/// initialize all taxels
+	void init(size_t n, float min=FLT_MAX, float max=-FLT_MAX);
+	/// re-initialize all taxels
+	void reset(float min=FLT_MAX, float max=-FLT_MAX);
+
 	static AccMode getMode (const std::string& sName);
 	static std::string getModeName (AccMode m);
 
 	size_t size() const {return vSensors.size();}
-	const TactileValue& operator[](size_t i) const
-		{return vSensors[i];}
+	const TactileValue& operator[](size_t i) const {return vSensors[i];}
+	TactileValue& operator[](size_t i) {return vSensors[i];}
 
 	const_iterator begin() const {return vSensors.begin();}
 	const_iterator end() const {return vSensors.end();}
@@ -73,12 +78,8 @@ public:
 	float getRangeLambda () const;
 	float getReleaseDecay () const;
 
-protected:
-	void init(size_t n);
-
 private:
 	std::vector<TactileValue> vSensors;
-	float fMin, fMax;
 };
 
 }
