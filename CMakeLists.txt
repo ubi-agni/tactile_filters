@@ -2,22 +2,27 @@ cmake_minimum_required(VERSION 2.8.3)
 project(tactile_filters)
 set(LIB_VERSION 0.0.1)
  
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+include(FindPkgConfig)
+pkg_search_module(YAML yaml-cpp)
 
 ## Specify additional locations of header files
-include_directories(include)
+include_directories(${YAML_INCLUDE_DIRS})
 
 ## enable C++11 standard
 add_definitions(-std=c++11)
+if(YAML_FOUND)
+   add_definitions(-DHAVE_YAML)
+endif(YAML_FOUND)
 
-set(HEADERS Range.h TactileValue.h TactileValueArray.h)
-set(SOURCES TactileValue.cpp TactileValueArray.cpp)
+set(HEADERS Range.h TactileValue.h TactileValueArray.h
+    Calibration.h PieceWiseLinearCalib.h)
+set(SOURCES TactileValue.cpp TactileValueArray.cpp
+    PieceWiseLinearCalib.cpp)
 add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 ## Specify libraries to link a library or executable target against
-#target_link_libraries(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} ${YAML_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}Targets
