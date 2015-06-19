@@ -24,6 +24,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADERS}")
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME} ${YAML_LIBRARIES})
 
+## testing
+enable_testing()
+add_subdirectory(test)
+
+## install
 install(TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}Targets
   ARCHIVE DESTINATION lib
