@@ -43,13 +43,6 @@ std::string TactileValueArray::getModeName (AccMode m) {
 	}
 }
 
-void TactileValueArray::updateValues(const TactileValueArray::vector_data &values) {
-	// resize first time if not yet initialized
-	if (vSensors.size() == 0) init(values.size());
-	assert(vSensors.size() == values.size());
-	updateValues(values.begin(), values.end());
-}
-
 TactileValueArray::vector_data 
 TactileValueArray::getValues (TactileValue::Mode mode) const {
 	vector_data vReturn(vSensors.size());

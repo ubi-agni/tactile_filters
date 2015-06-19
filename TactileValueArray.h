@@ -46,14 +46,26 @@ public:
 
 	/// update from all values in consecutive order from it to end
 	template <class T>
-	void updateValues(T v, T end) {
-		assert(end-v <= (std::ptrdiff_t) vSensors.size());
-		for (iterator it=this->vSensors.begin(); v != end; ++it, ++v)
+	void updateValues(T v, T end, iterator start) {
+		assert(end-v <= this->end()-start);
+		for (iterator it=start; v != end; ++it, ++v)
 			it->update(*v);
 	}
 
+	/// update from all values in consecutive order from it to end
+	template <class T>
+	void updateValues(T v, T end) {
+		updateValues(v, end, this->vSensors.begin());
+	}
+
 	/// convenience method to update from all values in vector
-	void updateValues(const vector_data &values);
+	template <class Iteratable>
+	void updateValues(const Iteratable &values) {
+		// resize first time if not yet initialized
+		if (vSensors.size() == 0) init(values.size());
+		assert(vSensors.size() == values.size());
+		updateValues(values.begin(), values.end(), vSensors.begin());
+	}
 
 	/// get values with given mode into existing Iterator tgt
 	template <typename Iterator>
