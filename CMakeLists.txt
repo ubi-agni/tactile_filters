@@ -8,6 +8,9 @@ set(LIB_VERSION 0.0.1)
 ## Specify additional locations of header files
 include_directories(include)
 
+## enable C++11 standard
+add_definitions(-std=c++11)
+
 set(HEADERS Range.h TactileValue.h TactileValueArray.h)
 set(SOURCES TactileValue.cpp TactileValueArray.cpp)
 add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES})

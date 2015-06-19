@@ -62,7 +62,7 @@ static float maxFun (float result, float c) {return std::max(result, c);}
 static float initial[] = {0,  0, 0,  0, 0,  FLT_MAX, -FLT_MAX};
 static AccumulatorFunction accumulators[] = {Add,  posAdd, negAdd,  posCnt, negCnt,  minFun, maxFun};
 
-float TactileValueArray::accumulate (float (*accessor)(const TactileValue& self),
+float TactileValueArray::accumulate (const AccessorFunction &accessor,
                                      AccMode mode, bool bMean) const {
 	float result = initial[mode];
 	AccumulatorFunction acc = accumulators[mode];

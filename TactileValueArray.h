@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <vector>
+#include <functional>
 #include <assert.h>
 #include "TactileValue.h"
 
@@ -77,8 +78,9 @@ public:
 	/// return values with given mode into new vector v
 	vector_data getValues (TactileValue::Mode mode) const;
 
-	float accumulate(float (*accessor)(const TactileValue &self),
-	                 AccMode mode, bool bMean) const;
+	typedef std::function<float(const TactileValue &self)> AccessorFunction;
+	float accumulate(const AccessorFunction &accessor,
+	                 AccMode mode=Sum, bool bMean=true) const;
 	static float accumulate (const vector_data& data,
 	                         AccMode mode=Sum, bool bMean=true);
 
