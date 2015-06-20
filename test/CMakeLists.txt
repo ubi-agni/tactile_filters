@@ -14,7 +14,19 @@ if(GTEST_SOURCE AND GTEST_INCLUDE_DIRS)
     PREFIX ${GTEST_DIR}
     BINARY_DIR ${GTEST_DIR}
     INSTALL_COMMAND "")
+  set(GTEST_FOUND TRUE)
+else()
+  ExternalProject_Add(GTest
+    URL https://googletest.googlecode.com/files/gtest-1.7.0.zip
+    URL_HASH SHA1=f85f6d2481e2c6c4a18539e391aa4ea8ab0394af
+    PREFIX ${GTEST_DIR}
+    BINARY_DIR ${GTEST_DIR}
+    INSTALL_COMMAND "")
+  set(GTEST_INCLUDE_DIRS ${GTEST_DIR}/src/GTest/include)
+  set(GTEST_FOUND TRUE)
+endif()
 
+if(GTEST_FOUND)
   add_library(gtest IMPORTED STATIC GLOBAL)
   set_target_properties(gtest PROPERTIES
     IMPORTED_LOCATION ${GTEST_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX})
@@ -22,10 +34,11 @@ if(GTEST_SOURCE AND GTEST_INCLUDE_DIRS)
   add_library(gtest_main IMPORTED STATIC GLOBAL)
   set_target_properties(gtest_main PROPERTIES
     IMPORTED_LOCATION ${GTEST_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX})
-  set(GTEST_FOUND TRUE)
+else()
+  message(WARNING "Google Test not available, skipping unittests")
 endif()
-
 #####################################################
+
 if(GTEST_FOUND)
 include_directories(${GTEST_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
 
@@ -39,6 +52,4 @@ add_test(
   NAME unittests 
   COMMAND unittests
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-else()
-  message(WARNING "Google Test not available, skipping unittests")
 endif(GTEST_FOUND)
