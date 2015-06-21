@@ -69,7 +69,7 @@ std::string TactileValueArray::getModeName (AccMode m) {
 TactileValueArray::vector_data 
 TactileValueArray::getValues (TactileValue::Mode mode) const {
 	vector_data vReturn(vSensors.size());
-	getValues(mode, vReturn.begin());
+	getValues(mode, vReturn);
 	return vReturn;
 }
 
@@ -85,6 +85,17 @@ static float maxFun (float result, float c) {return std::max(result, c);}
 static float initial[] = {0,  0, 0,  0, 0,  FLT_MAX, -FLT_MAX};
 static AccumulatorFunction accumulators[] = {Add,  posAdd, negAdd,  posCnt, negCnt,  minFun, maxFun};
 
+float TactileValueArray::accumulate (const vector_data& data,
+                                     AccMode mode, bool bMean) {
+	float result = std::accumulate(data.begin(), data.end(), initial[mode], accumulators[mode]);
+	if (bMean && data.size()) result /= data.size();
+	return result;
+}
+
+float TactileValueArray::accumulate (TactileValue::Mode mode, AccMode acc_mode, bool bMean) {
+	return accumulate([mode](const TactileValue &self) {return self.value(mode);}, acc_mode, bMean);
+}
+
 float TactileValueArray::accumulate (const AccessorFunction &accessor,
                                      AccMode mode, bool bMean) const {
 	float result = initial[mode];
@@ -92,13 +103,6 @@ float TactileValueArray::accumulate (const AccessorFunction &accessor,
 	for (const_iterator it=vSensors.begin(), e=vSensors.end(); it!=e; ++it)
 		result = acc(result, accessor(*it));
 	if (bMean && vSensors.size()) result /= vSensors.size();
-	return result;
-}
-
-float TactileValueArray::accumulate (const TactileValueArray::vector_data& data,
-                                     AccMode mode, bool bMean) {
-	float result = std::accumulate(data.begin(), data.end(), initial[mode], accumulators[mode]);
-	if (bMean && data.size()) result /= data.size();
 	return result;
 }
 
@@ -116,15 +120,15 @@ void TactileValueArray::setReleaseDecay (float fDecay) {
 }
 
 float TactileValueArray::getMeanLambda() const {
-	return vSensors[0].getMeanLambda();
+	return accumulate([](const TactileValue &self) {return self.getMeanLambda();}, Sum, true);
 }
 
 float TactileValueArray::getRangeLambda() const {
-	return vSensors[0].getRangeLambda();
+	return accumulate([](const TactileValue &self) {return self.getRangeLambda();}, Sum, true);
 }
 
 float TactileValueArray::getReleaseDecay() const {
-	return vSensors[0].getReleaseDecay();
+	return accumulate([](const TactileValue &self) {return self.getReleaseDecay();}, Sum, true);
 }
 
 }

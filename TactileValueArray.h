@@ -68,44 +68,60 @@ public:
 	iterator begin() {return vSensors.begin();}
 	iterator end() {return vSensors.end();}
 
-	/// update from all values in consecutive order from it to end
-	template <class T>
-	void updateValues(T v, T end, iterator start) {
-		assert(end-v <= this->end()-start);
-		for (iterator it=start; v != end; ++it, ++v)
-			it->update(*v);
-	}
+	/// update from values [first, last) copying to internal buffer + offset
+	template <class InputIterator>
+	void updateValues(InputIterator first, InputIterator last,
+	                  ptrdiff_t offset = 0) {
+		// resize vSensors if not yet initialized
+		if (vSensors.size() == 0 && offset >= 0)
+			init(last - first + offset);
 
-	/// update from all values in consecutive order from it to end
-	template <class T>
-	void updateValues(T v, T end) {
-		updateValues(v, end, this->vSensors.begin());
-	}
+		// start from begin() (when offset >= 0) or from end() (otherwise)
+		iterator start = offset >= 0 ? begin() + offset: end() + offset;
+		assert(start >= begin() && start + (last-first) <= end());
 
-	/// convenience method to update from all values in vector
+		for (; first != last; ++first, ++start)
+			start->update(*first);
+	}
+	/// convenience method to update from all values in source vector
 	template <class Iteratable>
-	void updateValues(const Iteratable &values) {
-		// resize first time if not yet initialized
-		if (vSensors.size() == 0) init(values.size());
-		assert(vSensors.size() == values.size());
-		updateValues(values.begin(), values.end(), vSensors.begin());
+	void updateValues(const Iteratable &source, ptrdiff_t offset=0) {
+		updateValues(source.begin(), source.end(), offset);
 	}
 
-	/// get values with given mode into existing Iterator tgt
-	template <typename Iterator>
-	void getValues(TactileValue::Mode mode, Iterator tgt) const {
-		for (const_iterator it=begin(), e=end(); it!=e; ++it, ++tgt)
-			*tgt = it->value(mode);
+	/// copy values beginning from offset into output iterator [first, last)
+	template <typename OutputIterator>
+	void getValues(TactileValue::Mode mode,
+	               OutputIterator first, OutputIterator last,
+	               ptrdiff_t offset=0) const {
+		// start from begin() (when offset >= 0) or from end() (otherwise)
+		const_iterator start = offset >= 0 ? begin() + offset: end() + offset;
+		assert(start >= begin() && start + (last-first) <= end());
+		for (; first != last; ++first, ++start)
+			*first = start->value(mode);
+	}
+	/// convenience method to copy values with given mode into target vector
+	template <class Iteratable>
+	void getValues (TactileValue::Mode mode, Iteratable &target,
+	                ptrdiff_t offset=0) const {
+		// resize target vector if not yet initialized
+		if (target.size() == 0) target.resize(vSensors.size());
+		getValues(mode, target.begin(), target.end(), offset);
 	}
 
 	/// return values with given mode into new vector v
 	vector_data getValues (TactileValue::Mode mode) const;
 
-	typedef std::function<float(const TactileValue &self)> AccessorFunction;
-	float accumulate(const AccessorFunction &accessor,
-	                 AccMode mode=Sum, bool bMean=true) const;
+	/// accumulate values in data vector
 	static float accumulate (const vector_data& data,
 	                         AccMode mode=Sum, bool bMean=true);
+	typedef std::function<float(const TactileValue &self)> AccessorFunction;
+	/// retrieve values with given mode and accumulate them with acc_mode
+	float accumulate (TactileValue::Mode mode,
+	                  AccMode acc_mode=Sum, bool bMean=true);
+	/// accumulate values in taxels accessed through accessor function
+	float accumulate(const AccessorFunction &accessor,
+	                 AccMode mode=Sum, bool bMean=true) const;
 
 	void setMeanLambda (float fLambda);
 	void setRangeLambda (float fLambda);
