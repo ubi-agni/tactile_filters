@@ -11,4 +11,5 @@ if(NOT TARGET @PROJECT_NAME@ AND NOT @PROJECT_NAME@_BINARY_DIR)
   include(${@PROJECT_NAME@_CMAKE_DIR}/@PROJECT_NAME@Targets.cmake)
 endif()
 
+add_definitions(-std=c++11)
 list(APPEND @PROJECT_NAME@_LIBRARIES @PROJECT_NAME@)
