@@ -68,6 +68,7 @@ void TactileValue::init(float fMin, float fMax)
 
 void TactileValue::update (float fNew) {
 	if (!isfinite(fNew)) return; // do not use invalid value
+	if (calib) fNew = calib->map(fNew);
 
 	rAbsRange.update (fNew); // set all-time minimum + maximum
 	rDynRange.update (fNew); // adapt sliding minimum + maximum

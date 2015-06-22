@@ -24,7 +24,9 @@
 #pragma once
 
 #include "Range.h"
+#include "Calibration.h"
 #include <string>
+#include <memory>
 
 namespace tactile {
 
@@ -65,11 +67,15 @@ public:
 	const Range& absRange () const {return rAbsRange;}
 	const Range& dynRange () const {return rDynRange;}
 
+	void setCalibration(const std::shared_ptr<Calibration> &c) {calib = c;}
+	std::shared_ptr<Calibration> getCalibration() const {return calib;}
+
 protected:
 	float fMeanLambda, fRangeLambda, fReleaseDecay;
 	float fCur, fMean, fReleased;
 	Range rAbsRange;
 	Range rDynRange;
+	std::shared_ptr<Calibration> calib;
 };
 
 }

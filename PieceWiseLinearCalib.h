@@ -32,7 +32,7 @@ class Node;
 
 namespace tactile {
 
-class PieceWiseLinearCalib : Calibration {
+class PieceWiseLinearCalib : public Calibration {
 public:
 	typedef std::map<float, float> CalibrationMap;
 
