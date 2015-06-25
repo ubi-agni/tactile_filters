@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(tactile_filters)
 set(LIB_VERSION 0.0.1)
- 
+
 include(FindPkgConfig)
 pkg_search_module(YAML yaml-cpp)
 
@@ -18,7 +18,7 @@ set(HEADERS Range.h TactileValue.h TactileValueArray.h
     Calibration.h PieceWiseLinearCalib.h)
 set(SOURCES TactileValue.cpp TactileValueArray.cpp
     PieceWiseLinearCalib.cpp)
-add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES})
+add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 ## Specify libraries to link a library or executable target against
@@ -51,13 +51,13 @@ configure_file(${PROJECT_NAME}ConfigVersion.cmake.in
                ${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
                @ONLY)
 # install the *Config.cmake and *ConfigVersion.cmake
-install(FILES 
+install(FILES
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
   DESTINATION share)
 
 # install the export set for use with the install-tree
-install(EXPORT ${PROJECT_NAME}Targets 
+install(EXPORT ${PROJECT_NAME}Targets
   DESTINATION share)
 
 ## pkgconfig file
