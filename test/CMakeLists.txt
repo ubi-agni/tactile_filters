@@ -45,11 +45,11 @@ include_directories(${GTEST_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
 # unittest sources
 file(GLOB TEST_SOURCES test_*.cpp)
 add_executable(unittests ${TEST_SOURCES})
-add_dependencies(unittests ${PROJECT_NAME})
+add_dependencies(unittests ${PROJECT_NAME} GTest)
 target_link_libraries(unittests gtest gtest_main pthread ${PROJECT_NAME})
 
 add_test(
-  NAME unittests 
+  NAME unittests
   COMMAND unittests
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif(GTEST_FOUND)
