@@ -41,12 +41,15 @@ public:
 
 	void init(const CalibrationMap &values);
 	float map(float x) const;
+	Range input_range() const;
+	Range output_range() const;
 
 	static CalibrationMap load(const YAML::Node &node);
 	static CalibrationMap load(const std::string &sYAMLFile);
 
 private:
 	CalibrationMap values;
+	Range          range;
 };
 
 }

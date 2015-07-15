@@ -36,6 +36,7 @@ TEST(PieceWiseLinearCalib, min_size)
 	EXPECT_FLOAT_EQ(c.map(100), 1);
 	EXPECT_FLOAT_EQ(c.map(-1), 0);
 	EXPECT_FLOAT_EQ(c.map(101), 1);
+	ASSERT_DEATH(c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}})), "> 1");
 }
 
 TEST(PieceWiseLinearCalib, constant)
@@ -63,6 +64,19 @@ TEST(PieceWiseLinearCalib, two_slopes)
 	EXPECT_FLOAT_EQ(c.map(175), 4);
 	EXPECT_FLOAT_EQ(c.map(200), 5);
 	EXPECT_FLOAT_EQ(c.map(201), 5);
+}
+
+TEST(PieceWiseLinearCalib, ranges) {
+	PieceWiseLinearCalib c;
+	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,1}}));
+	EXPECT_EQ(c.input_range(), Range(0,100));
+	EXPECT_EQ(c.output_range(), Range(0,1));
+	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,0}}));
+	EXPECT_EQ(c.input_range(), Range(0,100));
+	EXPECT_EQ(c.output_range(), Range(0,0));
+	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {1,1}, {2,1}, {3,0}}));
+	EXPECT_EQ(c.input_range(), Range(0,3));
+	EXPECT_EQ(c.output_range(), Range(0,1));
 }
 
 void test_trapez(const PieceWiseLinearCalib &c) {

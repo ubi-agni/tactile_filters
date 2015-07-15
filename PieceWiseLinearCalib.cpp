@@ -36,8 +36,11 @@ PieceWiseLinearCalib::PieceWiseLinearCalib(const CalibrationMap &values)
 
 void PieceWiseLinearCalib::init(const CalibrationMap &values)
 {
-	this->values = values;
 	assert(values.size() > 1);
+	this->values = values;
+	range = Range();
+	for (auto it = values.begin(), end=values.end(); it!=end; ++it)
+		range.update(it->second);
 }
 
 float PieceWiseLinearCalib::map(float x) const
@@ -51,6 +54,18 @@ float PieceWiseLinearCalib::map(float x) const
 	if (next == values.end()) return values.rbegin()->second;
 	CalibrationMap::const_iterator prev = next; --prev;
 	return prev->second + (x - prev->first) / (next->first - prev->first) * (next->second - prev->second);
+}
+
+Range PieceWiseLinearCalib::input_range() const
+{
+	float fMin = values.begin()->first,
+	      fMax = values.rbegin()->first;
+	return Range(fMin, fMax);
+}
+
+Range PieceWiseLinearCalib::output_range() const
+{
+	return range;
 }
 
 const std::string sNoYamlSupport("compiled without YAML support");

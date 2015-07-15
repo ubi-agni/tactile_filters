@@ -22,6 +22,8 @@
  * ============================================================ */
 #pragma once
 
+#include "Range.h"
+
 namespace tactile {
 
 class Calibration {
@@ -30,6 +32,8 @@ public:
 	virtual ~Calibration() {};
 
 	virtual float map(float) const = 0;
+	virtual Range input_range() const = 0;
+	virtual Range output_range() const = 0;
 };
 
 }
