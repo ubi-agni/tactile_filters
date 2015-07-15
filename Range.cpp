@@ -22,39 +22,26 @@
  *
  * ============================================================ */
 
-#pragma once
-#include <values.h>
-#include <iostream>
+#include "Range.h"
 
 namespace tactile {
 
-class Range {
-public:
-	Range (float fMin=FLT_MAX, float fMax=-FLT_MAX) {
-		init(fMin, fMax);
-	}
+std::ostream &operator<<(std::ostream &os, const Range &r) {
+	return os << "[" << r.min() << "," << r.max() << "]";
+}
 
-	void   init(float fMin=FLT_MAX, float fMax=-FLT_MAX);
+void Range::init(float fMin, float fMax) {
+	this->fMin = fMin; this->fMax = fMax;
+}
 
-	float  min() const {return fMin;}
-	float& min() {return fMin;}
+void Range::update(float fValue) {
+	if (fValue < fMin) fMin=fValue;
+	if (fValue > fMax) fMax=fValue;
+}
 
-	float  max() const {return fMax;}
-	float& max() {return fMax;}
-
-	float  range() const {return fMax-fMin;}
-
-	void   update (float fValue);
-
-	bool operator== (const Range &other) const;
-	bool operator!= (const Range &other) const {
-		return !(*this == other);
-	}
-
-private:
-	float fMin, fMax;
-};
-
-::std::ostream& operator<<(::std::ostream& os, const Range& r);
+bool tactile::Range::operator==(const tactile::Range &other) const {
+	return (this->fMin == other.fMin) &&
+	      (this->fMax == other.fMax);
+}
 
 }

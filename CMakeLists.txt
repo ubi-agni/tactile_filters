@@ -16,7 +16,7 @@ endif(YAML_FOUND)
 
 set(HEADERS Range.h TactileValue.h TactileValueArray.h
     Calibration.h PieceWiseLinearCalib.h)
-set(SOURCES TactileValue.cpp TactileValueArray.cpp
+set(SOURCES Range.cpp TactileValue.cpp TactileValueArray.cpp
     PieceWiseLinearCalib.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADERS}")
