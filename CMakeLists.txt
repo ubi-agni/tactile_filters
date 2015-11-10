@@ -41,8 +41,6 @@ install(TARGETS ${PROJECT_NAME}
 # Add all targets to the build-tree export set
 export(TARGETS ${PROJECT_NAME}
   FILE "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Targets.cmake")
-# Export the package for use from the build-tree
-export(PACKAGE ${PROJECT_NAME})
 
 configure_file(${PROJECT_NAME}Config.cmake.in
                ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
