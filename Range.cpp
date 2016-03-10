@@ -39,6 +39,11 @@ void Range::update(float fValue) {
 	if (fValue > fMax) fMax=fValue;
 }
 
+void Range::update(const Range &other) {
+	if (other.fMin < fMin) fMin = other.fMin;
+	if (other.fMax > fMax) fMax = other.fMax;
+}
+
 bool tactile::Range::operator==(const tactile::Range &other) const {
 	return (this->fMin == other.fMin) &&
 	      (this->fMax == other.fMax);

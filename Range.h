@@ -45,6 +45,7 @@ public:
 	float  range() const {return fMax-fMin;}
 
 	void   update (float fValue);
+	void   update (const Range &other);
 
 	bool operator== (const Range &other) const;
 	bool operator!= (const Range &other) const {
