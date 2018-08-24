@@ -54,13 +54,13 @@ write_basic_package_version_file(
 
 # install the export set for use in the install tree
 install(EXPORT ${PROJECT_NAME}Targets
-  DESTINATION share)
+  DESTINATION cmake)
 
 # install the *Config.cmake and *ConfigVersion.cmake
 install(FILES
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-  DESTINATION share)
+  DESTINATION cmake)
 
 ## pkgconfig file
 configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
