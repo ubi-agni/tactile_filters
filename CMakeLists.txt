@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(tactile_filters)
-set(LIB_VERSION 0.0.1)
+cmake_minimum_required(VERSION 3.1.3)
+project(tactile_filters VERSION 0.0.2)
 
 include(FindPkgConfig)
 pkg_search_module(YAML yaml-cpp)
@@ -48,7 +47,7 @@ configure_file("${PROJECT_NAME}Config.cmake.in"
 
 write_basic_package_version_file(
   "${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-  VERSION "${LIB_VERSION}"
+  VERSION "${VERSION}"
   COMPATIBILITY AnyNewerVersion
   )
 
