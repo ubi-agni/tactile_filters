@@ -28,13 +28,12 @@ namespace tactile {
 
 class Calibration {
 public:
-	Calibration() {};
-	virtual ~Calibration() {};
+	Calibration(){};
+	virtual ~Calibration(){};
 
 	virtual float map(float) const = 0;
 	virtual Range input_range() const = 0;
 	virtual Range output_range() const = 0;
 };
 
-}
-
+}  // namespace tactile

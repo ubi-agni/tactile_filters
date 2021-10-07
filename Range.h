@@ -30,27 +30,23 @@ namespace tactile {
 
 class Range {
 public:
-	Range (float fMin=FLT_MAX, float fMax=-FLT_MAX) {
-		init(fMin, fMax);
-	}
+	Range(float fMin = FLT_MAX, float fMax = -FLT_MAX) { init(fMin, fMax); }
 
-	void   init(float fMin=FLT_MAX, float fMax=-FLT_MAX);
+	void init(float fMin = FLT_MAX, float fMax = -FLT_MAX);
 
-	float  min() const {return fMin;}
-	float& min() {return fMin;}
+	float min() const { return fMin; }
+	float& min() { return fMin; }
 
-	float  max() const {return fMax;}
-	float& max() {return fMax;}
+	float max() const { return fMax; }
+	float& max() { return fMax; }
 
-	float  range() const {return fMax-fMin;}
+	float range() const { return fMax - fMin; }
 
-	void   update (float fValue);
-	void   update (const Range &other);
+	void update(float fValue);
+	void update(const Range& other);
 
-	bool operator== (const Range &other) const;
-	bool operator!= (const Range &other) const {
-		return !(*this == other);
-	}
+	bool operator==(const Range& other) const;
+	bool operator!=(const Range& other) const { return !(*this == other); }
 
 private:
 	float fMin, fMax;
@@ -58,4 +54,4 @@ private:
 
 ::std::ostream& operator<<(::std::ostream& os, const Range& r);
 
-}
+}  // namespace tactile

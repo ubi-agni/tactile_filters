@@ -49,7 +49,7 @@ public:
 
 private:
 	CalibrationMap values;
-	Range          range;
+	Range range;
 };
 
-}
+}  // namespace tactile

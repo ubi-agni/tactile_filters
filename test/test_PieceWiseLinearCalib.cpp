@@ -30,19 +30,19 @@ using namespace tactile;
 TEST(PieceWiseLinearCalib, min_size)
 {
 	PieceWiseLinearCalib c;
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,1}}));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 100, 1 } }));
 	EXPECT_FLOAT_EQ(c.map(0), 0);
 	EXPECT_FLOAT_EQ(c.map(20), 0.2);
 	EXPECT_FLOAT_EQ(c.map(100), 1);
 	EXPECT_FLOAT_EQ(c.map(-1), 0);
 	EXPECT_FLOAT_EQ(c.map(101), 1);
-	ASSERT_DEATH(c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}})), "> 1");
+	ASSERT_DEATH(c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 } })), "> 1");
 }
 
 TEST(PieceWiseLinearCalib, constant)
 {
 	PieceWiseLinearCalib c;
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,0}}));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 100, 0 } }));
 	EXPECT_FLOAT_EQ(c.map(0), 0);
 	EXPECT_FLOAT_EQ(c.map(20), 0);
 	EXPECT_FLOAT_EQ(c.map(100), 0);
@@ -53,7 +53,7 @@ TEST(PieceWiseLinearCalib, constant)
 TEST(PieceWiseLinearCalib, two_slopes)
 {
 	PieceWiseLinearCalib c;
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,1}, {200,5}}));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 100, 1 }, { 200, 5 } }));
 	EXPECT_FLOAT_EQ(c.map(-1), 0);
 	EXPECT_FLOAT_EQ(c.map(0), 0);
 	EXPECT_FLOAT_EQ(c.map(20), 0.2);
@@ -66,20 +66,22 @@ TEST(PieceWiseLinearCalib, two_slopes)
 	EXPECT_FLOAT_EQ(c.map(201), 5);
 }
 
-TEST(PieceWiseLinearCalib, ranges) {
+TEST(PieceWiseLinearCalib, ranges)
+{
 	PieceWiseLinearCalib c;
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,1}}));
-	EXPECT_EQ(c.input_range(), Range(0,100));
-	EXPECT_EQ(c.output_range(), Range(0,1));
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {100,0}}));
-	EXPECT_EQ(c.input_range(), Range(0,100));
-	EXPECT_EQ(c.output_range(), Range(0,0));
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {1,1}, {2,1}, {3,0}}));
-	EXPECT_EQ(c.input_range(), Range(0,3));
-	EXPECT_EQ(c.output_range(), Range(0,1));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 100, 1 } }));
+	EXPECT_EQ(c.input_range(), Range(0, 100));
+	EXPECT_EQ(c.output_range(), Range(0, 1));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 100, 0 } }));
+	EXPECT_EQ(c.input_range(), Range(0, 100));
+	EXPECT_EQ(c.output_range(), Range(0, 0));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 1, 1 }, { 2, 1 }, { 3, 0 } }));
+	EXPECT_EQ(c.input_range(), Range(0, 3));
+	EXPECT_EQ(c.output_range(), Range(0, 1));
 }
 
-void test_trapez(const PieceWiseLinearCalib &c) {
+void test_trapez(const PieceWiseLinearCalib &c)
+{
 	EXPECT_FLOAT_EQ(c.map(-1), 0);
 	EXPECT_FLOAT_EQ(c.map(0), 0);
 	EXPECT_FLOAT_EQ(c.map(0.2), 0.2);
@@ -95,16 +97,16 @@ void test_trapez(const PieceWiseLinearCalib &c) {
 TEST(PieceWiseLinearCalib, trapez)
 {
 	PieceWiseLinearCalib c;
-	c.init(PieceWiseLinearCalib::CalibrationMap({{0,0}, {1,1}, {2,1}, {3,0}}));
+	c.init(PieceWiseLinearCalib::CalibrationMap({ { 0, 0 }, { 1, 1 }, { 2, 1 }, { 3, 0 } }));
 	test_trapez(c);
 }
 
 TEST(PieceWiseLinearCalib, multi_init)
 {
 	PieceWiseLinearCalib c;
-	PieceWiseLinearCalib::CalibrationMap m({{0,1}, {1,2}, {2,3}, {3,4}});
-	PieceWiseLinearCalib::CalibrationMap m_final({{0,0}, {1,1}, {2,1}, {3,0}});
-	for (auto it=m_final.begin(), end=m_final.end(); it!=end; ++it)
+	PieceWiseLinearCalib::CalibrationMap m({ { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 } });
+	PieceWiseLinearCalib::CalibrationMap m_final({ { 0, 0 }, { 1, 1 }, { 2, 1 }, { 3, 0 } });
+	for (auto it = m_final.begin(), end = m_final.end(); it != end; ++it)
 		m[it->first] = it->second;
 	c.init(m);
 	test_trapez(c);

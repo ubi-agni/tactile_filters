@@ -26,13 +26,14 @@
 
 namespace tactile {
 
-TactileValue::TactileValue (float fMin, float fMax)
-	: fMeanLambda (0.7), fRangeLambda (0.9995), fReleaseDecay (0.05)
+TactileValue::TactileValue(float fMin, float fMax)
+  : fMeanLambda(0.7), fRangeLambda(0.9995), fReleaseDecay(0.05)
 {
 	init(fMin, fMax);
 }
 
-TactileValue::Mode TactileValue::getMode (const std::string& sName) {
+TactileValue::Mode TactileValue::getMode(const std::string& sName)
+{
 	if (sName == "rawCurrent") return rawCurrent;
 	if (sName == "rawMean") return rawMean;
 	if (sName == "absCurrent") return absCurrent;
@@ -41,10 +42,11 @@ TactileValue::Mode TactileValue::getMode (const std::string& sName) {
 	if (sName == "dynMean") return dynMean;
 	if (sName == "dynCurrentRelease") return dynCurrentRelease;
 	if (sName == "dynMeanRelease") return dynMeanRelease;
-	return absCurrent; // the default fallback
+	return absCurrent;  // the default fallback
 }
 
-std::string TactileValue::getModeName (Mode m) {
+std::string TactileValue::getModeName(Mode m)
+{
 	switch (m) {
 		case rawCurrent: return "rawCurrent";
 		case rawMean: return "rawMean";
@@ -66,16 +68,17 @@ void TactileValue::init(float fMin, float fMax)
 	this->fReleased = FLT_MAX;
 }
 
-void TactileValue::update (float fNew) {
-	if (!isfinite(fNew)) return; // do not use invalid value
+void TactileValue::update(float fNew)
+{
+	if (!isfinite(fNew)) return;  // do not use invalid value
 	if (calib) fNew = calib->map(fNew);
 
-	rAbsRange.update (fNew); // set all-time minimum + maximum
-	rDynRange.update (fNew); // adapt sliding minimum + maximum
+	rAbsRange.update(fNew);  // set all-time minimum + maximum
+	rDynRange.update(fNew);  // adapt sliding minimum + maximum
 	rDynRange.min() = fNew - fRangeLambda * (fNew - rDynRange.min());
 	rDynRange.max() = fNew + fRangeLambda * (rDynRange.max() - fNew);
 
-	if (isnan(fCur)) { // first update: init vars and return
+	if (isnan(fCur)) {  // first update: init vars and return
 		this->fCur = this->fMean = fNew;
 		return;
 	}
@@ -85,7 +88,7 @@ void TactileValue::update (float fNew) {
 	// compute release mode
 	const float fMargin = 0.1 * rAbsRange.range();
 	if (fReleased != FLT_MAX && fNew > fCur + fMargin) {
-		// if we recently released (fReleased != FLT_MAX) 
+		// if we recently released (fReleased != FLT_MAX)
 		// and fNew increased considerably, we leave release mode
 		fReleased = FLT_MAX;
 	} else if (fReleased == FLT_MAX && fNew < fCur - fMargin) {
@@ -105,33 +108,34 @@ void TactileValue::update (float fNew) {
 	fCur = fNew;
 }
 
-float TactileValue::value (Mode mode) const {
+float TactileValue::value(Mode mode) const
+{
 	if (mode == rawCurrent) return fCur;
 	if (mode == rawMean) return fMean;
 
-	const Range &r = (mode == absCurrent || mode == absMean) ? rAbsRange : rDynRange;
+	const Range& r = (mode == absCurrent || mode == absMean) ? rAbsRange : rDynRange;
 	float fRange = r.range();
-	if (fRange < FLT_EPSILON)
-		return NAN; // do not divide by zero
+	if (fRange < FLT_EPSILON) return NAN;  // do not divide by zero
 
-	if (mode >= dynCurrentRelease && fReleased != FLT_MAX)
-		return - (fReleased - r.min()) / fRange;
+	if (mode >= dynCurrentRelease && fReleased != FLT_MAX) return -(fReleased - r.min()) / fRange;
 
 	float v = fCur;
-	if (mode == absMean || mode == dynMean || mode == dynMeanRelease)
-		v = fMean;
+	if (mode == absMean || mode == dynMean || mode == dynMeanRelease) v = fMean;
 
 	return (v - r.min()) / fRange;
 }
 
-void  TactileValue::setMeanLambda (float fLambda) {
-	this->fMeanLambda=fLambda;
+void TactileValue::setMeanLambda(float fLambda)
+{
+	this->fMeanLambda = fLambda;
 }
-void  TactileValue::setRangeLambda (float fLambda) {
-	this->fRangeLambda=fLambda;
+void TactileValue::setRangeLambda(float fLambda)
+{
+	this->fRangeLambda = fLambda;
 }
-void  TactileValue::setReleaseDecay (float fDecay) {
-	this->fReleaseDecay=fDecay;
+void TactileValue::setReleaseDecay(float fDecay)
+{
+	this->fReleaseDecay = fDecay;
 }
 
-}
+}  // namespace tactile

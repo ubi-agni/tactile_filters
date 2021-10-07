@@ -39,7 +39,7 @@ void PieceWiseLinearCalib::init(const CalibrationMap &values)
 	assert(values.size() > 1);
 	this->values = values;
 	range = Range();
-	for (auto it = values.begin(), end=values.end(); it!=end; ++it)
+	for (auto it = values.begin(), end = values.end(); it != end; ++it)
 		range.update(it->second);
 }
 
@@ -47,19 +47,20 @@ float PieceWiseLinearCalib::map(float x) const
 {
 	assert(values.size() > 1);
 	// retrieve first key that is larger than x
-	CalibrationMap::const_iterator next=values.upper_bound(x);
+	CalibrationMap::const_iterator next = values.upper_bound(x);
 	// if x is smaller than key range, clip to smallest value
 	if (next == values.begin()) return values.begin()->second;
 	// if x is larger than key range, clip to largest value
 	if (next == values.end()) return values.rbegin()->second;
-	CalibrationMap::const_iterator prev = next; --prev;
-	return prev->second + (x - prev->first) / (next->first - prev->first) * (next->second - prev->second);
+	CalibrationMap::const_iterator prev = next;
+	--prev;
+	return prev->second +
+	       (x - prev->first) / (next->first - prev->first) * (next->second - prev->second);
 }
 
 Range PieceWiseLinearCalib::input_range() const
 {
-	float fMin = values.begin()->first,
-	      fMax = values.rbegin()->first;
+	float fMin = values.begin()->first, fMax = values.rbegin()->first;
 	return Range(fMin, fMax);
 }
 
@@ -69,12 +70,11 @@ Range PieceWiseLinearCalib::output_range() const
 }
 
 const std::string sNoYamlSupport("compiled without YAML support");
-PieceWiseLinearCalib::CalibrationMap
-PieceWiseLinearCalib::load(const YAML::Node &node)
+PieceWiseLinearCalib::CalibrationMap PieceWiseLinearCalib::load(const YAML::Node &node)
 {
 #ifdef HAVE_YAML
 	CalibrationMap values;
-	for(YAML::const_iterator it=node.begin(); it!=node.end(); ++it)
+	for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
 		values[it->first.as<float>()] = it->second.as<float>();
 	return values;
 #else
@@ -82,8 +82,7 @@ PieceWiseLinearCalib::load(const YAML::Node &node)
 #endif
 }
 
-PieceWiseLinearCalib::CalibrationMap
-PieceWiseLinearCalib::load(const std::string &sYAMLFile)
+PieceWiseLinearCalib::CalibrationMap PieceWiseLinearCalib::load(const std::string &sYAMLFile)
 {
 #ifdef HAVE_YAML
 	return load(YAML::LoadFile(sYAMLFile));
@@ -92,4 +91,4 @@ PieceWiseLinearCalib::load(const std::string &sYAMLFile)
 #endif
 }
 
-}
+}  // namespace tactile

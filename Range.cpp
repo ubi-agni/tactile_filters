@@ -26,27 +26,32 @@
 
 namespace tactile {
 
-std::ostream &operator<<(std::ostream &os, const Range &r) {
+std::ostream &operator<<(std::ostream &os, const Range &r)
+{
 	return os << "[" << r.min() << "," << r.max() << "]";
 }
 
-void Range::init(float fMin, float fMax) {
-	this->fMin = fMin; this->fMax = fMax;
+void Range::init(float fMin, float fMax)
+{
+	this->fMin = fMin;
+	this->fMax = fMax;
 }
 
-void Range::update(float fValue) {
-	if (fValue < fMin) fMin=fValue;
-	if (fValue > fMax) fMax=fValue;
+void Range::update(float fValue)
+{
+	if (fValue < fMin) fMin = fValue;
+	if (fValue > fMax) fMax = fValue;
 }
 
-void Range::update(const Range &other) {
+void Range::update(const Range &other)
+{
 	if (other.fMin < fMin) fMin = other.fMin;
 	if (other.fMax > fMax) fMax = other.fMax;
 }
 
-bool tactile::Range::operator==(const tactile::Range &other) const {
-	return (this->fMin == other.fMin) &&
-	      (this->fMax == other.fMax);
+bool tactile::Range::operator==(const tactile::Range &other) const
+{
+	return (this->fMin == other.fMin) && (this->fMax == other.fMax);
 }
 
-}
+}  // namespace tactile

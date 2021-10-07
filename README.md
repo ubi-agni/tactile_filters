@@ -5,7 +5,7 @@ It also provides a piece wise linear calibration.
 
 ## Single sensor cell filtering
 
-### Available modes 
+### Available modes
 
 * *rawCurrent*: current raw value, no computation, no averaging
 * *rawMean*: averaged raw value
@@ -16,7 +16,7 @@ It also provides a piece wise linear calibration.
 * *dynCurrentRelease*: like dynCurrent, but negative values indicate difference force to recently released grasp
 * *dynMeanRelease*: averaged dynMeanRelease
 
-## Array sensor filtering 
+## Array sensor filtering
 
 This adds accumulation modes to aggregate all sensor values within the array into a single value.
 
@@ -30,7 +30,7 @@ This adds accumulation modes to aggregate all sensor values within the array int
 * Min
 * Max
 
-### Settings 
+### Settings
 
 * meanAlpha: smoothing factor of the exponential moving average (default 0.7)
 * rangeLambda: smoothing factor of the filter for the update of the min and max of the dynamic range (default 0.9995)

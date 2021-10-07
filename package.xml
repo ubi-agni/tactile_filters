@@ -3,7 +3,7 @@
   <version>0.0.1</version>
   <description>filters and calibration tools for tactile sensors</description>
 
-  <!-- One maintainer tag required, multiple allowed, one person per tag --> 
+  <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="rhaschke@techfak.uni-bielefeld.de">Robert Haschke</maintainer>
 
   <!-- One license tag required, multiple allowed, one license per tag -->
