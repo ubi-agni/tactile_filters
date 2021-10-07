@@ -39,8 +39,8 @@ void PieceWiseLinearCalib::init(const CalibrationMap &values)
 	assert(values.size() > 1);
 	this->values = values;
 	range = Range();
-	for (auto it = values.begin(), end = values.end(); it != end; ++it)
-		range.update(it->second);
+	for (const auto &value : values)
+		range.update(value.second);
 }
 
 float PieceWiseLinearCalib::map(float x) const
@@ -60,8 +60,7 @@ float PieceWiseLinearCalib::map(float x) const
 
 Range PieceWiseLinearCalib::input_range() const
 {
-	float fMin = values.begin()->first, fMax = values.rbegin()->first;
-	return Range(fMin, fMax);
+	return Range(values.begin()->first, values.rbegin()->first);
 }
 
 Range PieceWiseLinearCalib::output_range() const
@@ -69,7 +68,7 @@ Range PieceWiseLinearCalib::output_range() const
 	return range;
 }
 
-const std::string sNoYamlSupport("compiled without YAML support");
+const std::string NO_YAML_SUPPORT("compiled without YAML support");
 PieceWiseLinearCalib::CalibrationMap PieceWiseLinearCalib::load(const YAML::Node &node)
 {
 #ifdef HAVE_YAML
@@ -78,7 +77,7 @@ PieceWiseLinearCalib::CalibrationMap PieceWiseLinearCalib::load(const YAML::Node
 		values[it->first.as<float>()] = it->second.as<float>();
 	return values;
 #else
-	throw std::runtime_error(sNoYamlSupport);
+	throw std::runtime_error(NO_YAML_SUPPORT);
 #endif
 }
 
@@ -87,7 +86,7 @@ PieceWiseLinearCalib::CalibrationMap PieceWiseLinearCalib::load(const std::strin
 #ifdef HAVE_YAML
 	return load(YAML::LoadFile(sYAMLFile));
 #else
-	throw std::runtime_error(sNoYamlSupport);
+	throw std::runtime_error(NO_YAML_SUPPORT);
 #endif
 }
 

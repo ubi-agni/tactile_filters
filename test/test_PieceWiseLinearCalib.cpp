@@ -106,8 +106,8 @@ TEST(PieceWiseLinearCalib, multi_init)
 	PieceWiseLinearCalib c;
 	PieceWiseLinearCalib::CalibrationMap m({ { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 } });
 	PieceWiseLinearCalib::CalibrationMap m_final({ { 0, 0 }, { 1, 1 }, { 2, 1 }, { 3, 0 } });
-	for (auto it = m_final.begin(), end = m_final.end(); it != end; ++it)
-		m[it->first] = it->second;
+	for (auto &pair : m_final)
+		m[pair.first] = pair.second;
 	c.init(m);
 	test_trapez(c);
 }

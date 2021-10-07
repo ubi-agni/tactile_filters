@@ -39,8 +39,8 @@ void TactileValueArray::init(size_t n, float min, float max)
 
 void TactileValueArray::reset(float min, float max)
 {
-	for (iterator it = vSensors.begin(), e = vSensors.end(); it != e; ++it)
-		it->init(min, max);
+	for (auto &sensor : vSensors)
+		sensor.init(min, max);
 }
 
 
@@ -119,13 +119,13 @@ static float maxFun(float result, float c)
 	return std::max(result, c);
 }
 
-static float initial[] = { 0, 0, 0, 0, 0, FLT_MAX, -FLT_MAX };
-static AccumulatorFunction accumulators[] = { Add, posAdd, negAdd, posCnt, negCnt, minFun, maxFun };
+static float INITIAL[] = { 0, 0, 0, 0, 0, FLT_MAX, -FLT_MAX };
+static AccumulatorFunction ACCUMULATORS[] = { Add, posAdd, negAdd, posCnt, negCnt, minFun, maxFun };
 
 float TactileValueArray::accumulate(const vector_data &data, AccMode mode, bool bMean)
 {
-	float result = std::accumulate(data.begin(), data.end(), initial[mode], accumulators[mode]);
-	if (bMean && data.size()) result /= data.size();
+	float result = std::accumulate(data.begin(), data.end(), INITIAL[mode], ACCUMULATORS[mode]);
+	if (bMean && !data.empty()) result /= data.size();
 	return result;
 }
 
@@ -138,28 +138,28 @@ float TactileValueArray::accumulate(TactileValue::Mode mode, AccMode acc_mode, b
 float TactileValueArray::accumulate(const AccessorFunction &accessor, AccMode mode,
                                     bool bMean) const
 {
-	float result = initial[mode];
-	AccumulatorFunction acc = accumulators[mode];
-	for (const_iterator it = vSensors.begin(), e = vSensors.end(); it != e; ++it)
-		result = acc(result, accessor(*it));
-	if (bMean && vSensors.size()) result /= vSensors.size();
+	float result = INITIAL[mode];
+	AccumulatorFunction acc = ACCUMULATORS[mode];
+	for (const auto &sensor : vSensors)
+		result = acc(result, accessor(sensor));
+	if (bMean && !vSensors.empty()) result /= vSensors.size();
 	return result;
 }
 
 void TactileValueArray::setMeanLambda(float fLambda)
 {
-	for (iterator it = vSensors.begin(), e = vSensors.end(); it != e; ++it)
-		it->setMeanLambda(fLambda);
+	for (auto &sensor : vSensors)
+		sensor.setMeanLambda(fLambda);
 }
 void TactileValueArray::setRangeLambda(float fLambda)
 {
-	for (iterator it = vSensors.begin(), e = vSensors.end(); it != e; ++it)
-		it->setRangeLambda(fLambda);
+	for (auto &sensor : vSensors)
+		sensor.setRangeLambda(fLambda);
 }
 void TactileValueArray::setReleaseDecay(float fDecay)
 {
-	for (iterator it = vSensors.begin(), e = vSensors.end(); it != e; ++it)
-		it->setReleaseDecay(fDecay);
+	for (auto &sensor : vSensors)
+		sensor.setReleaseDecay(fDecay);
 }
 
 float TactileValueArray::getMeanLambda() const
