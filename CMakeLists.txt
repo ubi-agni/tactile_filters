@@ -65,3 +65,7 @@ install(FILES
 configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
         DESTINATION lib/pkgconfig)
+
+# install package.xml
+install(FILES package.xml
+        DESTINATION share/${PROJECT_NAME})
