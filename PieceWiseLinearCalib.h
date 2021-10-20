@@ -34,15 +34,15 @@ namespace tactile {
 
 class PieceWiseLinearCalib : public Calibration {
 public:
-	typedef std::map<float, float> CalibrationMap;
+	using CalibrationMap = std::map<float, float>;
 
 	PieceWiseLinearCalib() {}
 	PieceWiseLinearCalib(const CalibrationMap &values);
 
 	void init(const CalibrationMap &values);
-	float map(float x) const;
-	Range input_range() const;
-	Range output_range() const;
+	float map(float x) const override;
+	Range input_range() const override;
+	Range output_range() const override;
 
 	static CalibrationMap load(const YAML::Node &node);
 	static CalibrationMap load(const std::string &sYAMLFile);

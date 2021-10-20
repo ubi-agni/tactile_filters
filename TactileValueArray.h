@@ -37,9 +37,9 @@ namespace tactile {
  */
 class TactileValueArray {
 public:
-	typedef std::vector<float> vector_data;
-	typedef std::vector<TactileValue>::const_iterator const_iterator;
-	typedef std::vector<TactileValue>::iterator iterator;
+	using vector_data = std::vector<float>;
+	using const_iterator = std::vector<TactileValue>::const_iterator;
+	using iterator = std::vector<TactileValue>::iterator;
 
 	enum AccMode
 	{
@@ -79,7 +79,7 @@ public:
 	void updateValues(InputIterator first, InputIterator last, ptrdiff_t offset = 0)
 	{
 		// resize vSensors if not yet initialized
-		if (vSensors.size() == 0 && offset >= 0) init(last - first + offset);
+		if (vSensors.empty() && offset >= 0) init(last - first + offset);
 
 		// start from begin() (when offset >= 0) or from end() (otherwise)
 		iterator start = offset >= 0 ? begin() + offset : end() + offset;
@@ -111,7 +111,7 @@ public:
 	void getValues(TactileValue::Mode mode, Iteratable& target, ptrdiff_t offset = 0) const
 	{
 		// resize target vector if not yet initialized
-		if (target.size() == 0) target.resize(vSensors.size());
+		if (target.empty()) target.resize(vSensors.size());
 		getValues(mode, target.begin(), target.end(), offset);
 	}
 
@@ -120,7 +120,7 @@ public:
 
 	/// accumulate values in data vector
 	static float accumulate(const vector_data& data, AccMode mode = Sum, bool bMean = true);
-	typedef std::function<float(const TactileValue& self)> AccessorFunction;
+	using AccessorFunction = std::function<float(const TactileValue&)>;
 	/// retrieve values with given mode and accumulate them with acc_mode
 	float accumulate(TactileValue::Mode mode, AccMode acc_mode = Sum, bool bMean = true);
 	/// accumulate values in taxels accessed through accessor function

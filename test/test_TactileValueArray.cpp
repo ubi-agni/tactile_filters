@@ -45,7 +45,7 @@ TEST(TactileValueArray, auto_init)
 
 TEST(TactileValueArray, auto_init_offset)
 {
-	int offset = 2;
+	size_t offset = 2;
 	TactileValueArray sensor;
 	sensor.updateValues(VALUES, offset);
 	ASSERT_EQ(sensor.size(), VALUES.size() + offset);
@@ -61,7 +61,7 @@ TEST(TactileValueArray, auto_init_offset)
 
 TEST(TactileValueArray, update_neg_offset)
 {
-	int offset = 2;
+	size_t offset = 2;
 	TactileValueArray sensor(VALUES.size() + offset);
 	sensor.updateValues(VALUES);
 	std::vector<float> stored = sensor.getValues(TactileValue::rawCurrent);
