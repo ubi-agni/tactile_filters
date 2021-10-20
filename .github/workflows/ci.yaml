@@ -20,7 +20,7 @@ jobs:
               CLANG_TIDY: pedantic
 
     env:
-      CXXFLAGS: "-Wall -Wextra -Wwrite-strings -Wunreachable-code -Wpointer-arith -Wredundant-decls"
+      CXXFLAGS: "-Werror -Wall -Wextra -Wwrite-strings -Wunreachable-code -Wpointer-arith -Wredundant-decls"
       CLANG_TIDY_ARGS: --fix --fix-errors --format-style=file
       CATKIN_LINT: true
       BASEDIR: ${{ github.workspace }}/.work
