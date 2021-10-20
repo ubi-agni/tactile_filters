@@ -2,7 +2,8 @@ enable_testing()
 find_package(GTest)
 
 if(GTEST_FOUND)
-include_directories(${GTEST_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
+include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR})
 
 # unittest sources
 file(GLOB TEST_SOURCES test_*.cpp)

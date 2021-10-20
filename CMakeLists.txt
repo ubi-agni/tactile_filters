@@ -5,7 +5,7 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(YAML yaml-cpp)
 
 ## Specify additional locations of header files
-include_directories(${YAML_INCLUDE_DIRS})
+include_directories(SYSTEM ${YAML_INCLUDE_DIRS})
 
 if(YAML_FOUND)
    add_definitions(-DHAVE_YAML)
