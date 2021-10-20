@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1.3)
 project(tactile_filters VERSION 0.0.2)
 
-include(FindPkgConfig)
+find_package(PkgConfig REQUIRED)
 pkg_search_module(YAML yaml-cpp)
 
 ## Specify additional locations of header files

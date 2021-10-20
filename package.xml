@@ -22,6 +22,9 @@
   <!-- Example: -->
   <author email="rhaschke@techfak.uni-bielefeld.de">Robert Haschke</author>
 
+  <build_depend>pkg-config</build_depend>
+  <build_depend>yaml-cpp</build_depend>
+
   <export>
     <build_type>cmake</build_type>
   </export>
