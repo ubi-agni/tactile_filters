@@ -47,7 +47,7 @@ public:
 		dynCurrentRelease,  // like dynCurrent, but negative values indicate difference force to
 		                    // recently released grasp
 		dynMeanRelease,     // averaged dynMeanRelease
-		lastMode,
+		lastMode = dynMeanRelease,
 	};
 	TactileValue(float fMin = FLT_MAX, float fMax = -FLT_MAX);
 
