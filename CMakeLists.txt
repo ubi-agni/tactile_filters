@@ -17,8 +17,6 @@ set(SOURCES Range.cpp TactileValue.cpp TactileValueArray.cpp
     PieceWiseLinearCalib.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADERS}")
-## require C++11 standard
-target_compile_options(${PROJECT_NAME} PUBLIC -std=c++11)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME} PRIVATE ${YAML_LIBRARIES})
 
